@@ -3,7 +3,11 @@ using CardService.Api.Models.Enums;
 
 namespace CardService.Api.Services
 {
-    public class CardService
+    public interface ICardService
+    {
+        Task<CardDetails?> GetCardDetails(string userId, string cardNumber);
+    }
+    public class CardService : ICardService
     {
         private readonly Dictionary<string, Dictionary<string, CardDetails>> _userCards = CreateSampleUserCards();
         public async Task<CardDetails?> GetCardDetails(string userId, string cardNumber)

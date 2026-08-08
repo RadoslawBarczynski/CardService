@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="CardService/CardService.csproj" />
+  <Project Path="CardService.Api/CardService.Api.csproj" />
+  <Project Path="CardService.Tests/CardService.Tests.csproj" />
 </Solution>
