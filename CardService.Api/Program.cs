@@ -1,4 +1,5 @@
 using CardService.Api.Services;
+using Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

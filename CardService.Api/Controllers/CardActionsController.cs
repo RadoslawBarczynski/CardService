@@ -1,5 +1,6 @@
 ﻿using CardService.Api.Models.Responses;
 using CardService.Api.Services;
+using Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CardService.Api.Controllers

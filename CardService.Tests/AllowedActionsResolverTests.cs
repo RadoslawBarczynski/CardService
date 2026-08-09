@@ -1,6 +1,7 @@
 using CardService.Api.Models;
-using CardService.Api.Models.Enums;
-using CardService.Api.Services;
+using Domain;
+using Domain.Enums;
+using Domain.Services;
 
 namespace CardService.Tests
 {

@@ -1,4 +1,4 @@
-﻿namespace CardService.Api.Models.Enums
+﻿namespace Domain.Enums
 {
     public enum CardType
     {

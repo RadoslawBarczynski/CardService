@@ -1,6 +1,6 @@
-﻿using CardService.Api.Models.Enums;
+﻿using Domain.Enums;
 
-namespace CardService.Api.Models
+namespace Domain
 {
     public record CardDetails(string CardNumber, CardType CardType, CardStatus CardStatus, bool IsPinSet);
 }

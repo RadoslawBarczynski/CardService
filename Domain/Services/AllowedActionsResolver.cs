@@ -1,13 +1,7 @@
-﻿using CardService.Api.Models;
-using CardService.Api.Models.Enums;
+﻿using Domain.Enums;
 
-namespace CardService.Api.Services
+namespace Domain.Services
 {
-    public interface IAllowedActionsResolver
-    {
-        IReadOnlyCollection<ActionType> GetAllowedActions(CardDetails card);
-    }
-
     public sealed class AllowedActionsResolver : IAllowedActionsResolver
     {
         public IReadOnlyCollection<ActionType> GetAllowedActions(CardDetails card)

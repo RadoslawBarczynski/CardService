@@ -1,12 +1,8 @@
-﻿using CardService.Api.Models;
-using CardService.Api.Models.Enums;
+﻿using Domain;
+using Domain.Enums;
 
 namespace CardService.Api.Services
 {
-    public interface ICardService
-    {
-        Task<CardDetails?> GetCardDetails(string userId, string cardNumber);
-    }
     public class CardService : ICardService
     {
         private readonly Dictionary<string, Dictionary<string, CardDetails>> _userCards = CreateSampleUserCards();
