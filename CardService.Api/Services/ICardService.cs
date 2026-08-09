@@ -4,6 +4,6 @@ namespace CardService.Api.Services
 {
     public interface ICardService
     {
-        Task<CardDetails?> GetCardDetails(string userId, string cardNumber);
+        Task<CardDetails?> GetCardDetails(string userId, string cardNumber, CancellationToken cancellationToken = default);
     }
 }

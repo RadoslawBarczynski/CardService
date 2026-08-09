@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="CardService.Api/CardService.Api.csproj" />
   <Project Path="CardService.Tests/CardService.Tests.csproj" />
+  <Project Path="Domain/Domain.csproj" Id="3596d497-84f9-4f27-976e-045f3848bc60" />
 </Solution>

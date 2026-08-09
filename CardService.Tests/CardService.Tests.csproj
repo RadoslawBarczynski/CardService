@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CardService.Api\CardService.Api.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
