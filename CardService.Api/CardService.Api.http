@@ -1,6 +1,18 @@
 @CardService.Api_HostAddress = http://localhost:5295
 
-GET {{CardService.Api_HostAddress}}/weatherforecast/
+### PREPAID + CLOSED → ACTION3, ACTION4, ACTION9
+GET {{CardService.Api_HostAddress}}/api/cards/User1/Card17/actions
 Accept: application/json
 
+### CREDIT + BLOCKED
+GET {{CardService.Api_HostAddress}}/api/cards/User1/Card119/actions
+Accept: application/json
+
+### Nieistniejąca karta
+GET {{CardService.Api_HostAddress}}/api/cards/User1/Card999/actions
+Accept: application/json
+
+### Health
+GET {{CardService.Api_HostAddress}}/health
+Accept: application/json
 ###

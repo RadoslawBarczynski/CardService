@@ -10,6 +10,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<ICardService, CardService.Api.Services.CardService>();
 builder.Services.AddSingleton<IAllowedActionsResolver, AllowedActionsResolver>();
 
+builder.Services.AddHealthChecks();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -30,6 +32,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.MapHealthChecks("/health");
 app.MapControllers();
 
 app.Run();
