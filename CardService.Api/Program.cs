@@ -1,5 +1,5 @@
 using CardService.Api.Services;
-using Domain.Services;
+using CardService.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +11,8 @@ builder.Services.AddSingleton<ICardService, CardService.Api.Services.CardService
 builder.Services.AddSingleton<IAllowedActionsResolver, AllowedActionsResolver>();
 
 builder.Services.AddHealthChecks();
+
+builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>

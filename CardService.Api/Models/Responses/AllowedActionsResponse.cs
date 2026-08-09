@@ -1,4 +1,4 @@
-﻿using Domain.Enums;
+﻿using CardService.Domain.Enums;
 
 namespace CardService.Api.Models.Responses
 {

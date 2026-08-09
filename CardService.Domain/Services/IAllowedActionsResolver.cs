@@ -1,6 +1,7 @@
-﻿using Domain.Enums;
+﻿using CardService.Domain;
+using CardService.Domain.Enums;
 
-namespace Domain.Services
+namespace CardService.Domain.Services
 {
     public interface IAllowedActionsResolver
     {

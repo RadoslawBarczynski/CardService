@@ -1,5 +1,5 @@
-﻿using Domain;
-using Domain.Enums;
+﻿using CardService.Domain;
+using CardService.Domain.Enums;
 
 namespace CardService.Api.Services
 {

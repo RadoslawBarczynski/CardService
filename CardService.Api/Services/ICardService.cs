@@ -1,4 +1,4 @@
-﻿using Domain;
+﻿using CardService.Domain;
 
 namespace CardService.Api.Services
 {

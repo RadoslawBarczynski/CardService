@@ -1,4 +1,4 @@
-﻿namespace Domain.Enums
+﻿namespace CardService.Domain.Enums
 {
     public enum ActionType
     {

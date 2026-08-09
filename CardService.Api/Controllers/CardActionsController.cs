@@ -1,7 +1,7 @@
 ﻿using CardService.Api.Helpers;
 using CardService.Api.Models.Responses;
 using CardService.Api.Services;
-using Domain.Services;
+using CardService.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CardService.Api.Controllers
@@ -30,7 +30,10 @@ namespace CardService.Api.Controllers
 
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(cardNumber))
             {
-                return BadRequest("userId and cardNumber are required");
+                return Problem(
+                    statusCode: StatusCodes.Status400BadRequest,
+                    title: "Invalid request",
+                    detail: "userId and cardNumber are required.");
             }
 
             var card = await _cardService.GetCardDetails(userId, cardNumber, cancellationToken);
@@ -39,7 +42,10 @@ namespace CardService.Api.Controllers
             {
                 _logger.LogWarning("Card not found for user {UserId}, card {MaskedCardNumber}", userId, maskedCardNumber);
 
-                return NotFound($"Card '{cardNumber}' for user '{userId}' not found");
+                return Problem(
+                    statusCode: StatusCodes.Status404NotFound,
+                    title: "Card not found",
+                    detail: $"Card '{maskedCardNumber}' for user '{userId}' was not found.");
             }
 
             var actions = _actionsResolver.GetAllowedActions(card);
