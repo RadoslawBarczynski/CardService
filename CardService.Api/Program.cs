@@ -30,9 +30,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<CardService.Api.Middleware.CorrelationIdMiddleware>();
+
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
 app.MapHealthChecks("/health");
 app.MapControllers();

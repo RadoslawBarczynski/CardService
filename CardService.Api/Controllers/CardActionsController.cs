@@ -26,7 +26,10 @@ namespace CardService.Api.Controllers
         {
             var maskedCardNumber = CardNumberMasker.Mask(cardNumber);
 
-            _logger.LogInformation("Resolving allowed actions for user {UserId}, card {MaskedCardNumber}", userId, maskedCardNumber);
+            _logger.LogInformation("Resolving allowed actions for user {UserId}, card {MaskedCardNumber}, correlation-id: {CorrelactionId}", 
+                userId, 
+                maskedCardNumber, 
+                HttpContext.TraceIdentifier);
 
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(cardNumber))
             {
