@@ -37,6 +37,7 @@ namespace CardService.Domain.Services
 
         private static bool IsAllowedForCardStatus(ActionType action, CardStatus status, bool isPinSet)
         {
+            //it can be done more robust, but in case of recruitment process assingment, I simplified it
             switch (action)
             {
                 case ActionType.ACTION1:

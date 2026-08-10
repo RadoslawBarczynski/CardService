@@ -26,11 +26,6 @@ namespace CardService.Api.Controllers
         {
             var maskedCardNumber = CardNumberMasker.Mask(cardNumber);
 
-            _logger.LogInformation("Resolving allowed actions for user {UserId}, card {MaskedCardNumber}, correlation-id: {CorrelactionId}", 
-                userId, 
-                maskedCardNumber, 
-                HttpContext.TraceIdentifier);
-
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(cardNumber))
             {
                 return Problem(
@@ -38,6 +33,12 @@ namespace CardService.Api.Controllers
                     title: "Invalid request",
                     detail: "userId and cardNumber are required.");
             }
+
+            _logger.LogInformation("Resolving allowed actions for user {UserId}, card {MaskedCardNumber}, correlation-id: {CorrelactionId}", 
+                userId, 
+                maskedCardNumber, 
+                HttpContext.TraceIdentifier);
+
 
             var card = await _cardService.GetCardDetails(userId, cardNumber, cancellationToken);
 

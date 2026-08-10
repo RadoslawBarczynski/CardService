@@ -1,3 +1,4 @@
+using CardService.Api.Models;
 using CardService.Api.Services;
 using CardService.Domain.Services;
 
@@ -9,6 +10,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSingleton<ICardService, CardService.Api.Services.CardService>();
 builder.Services.AddSingleton<IAllowedActionsResolver, AllowedActionsResolver>();
+
+builder.Services.Configure<CardServiceOptions>(
+    builder.Configuration.GetSection(CardServiceOptions.SectionName));
 
 builder.Services.AddHealthChecks();
 
@@ -24,15 +28,22 @@ builder.Services.AddControllers()
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<CardService.Api.Middleware.CorrelationIdMiddleware>();
+
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<CardService.Api.Middleware.CorrelationIdMiddleware>();
 
-app.UseHttpsRedirection();
+//in case of development I'm skipping SSL security layer
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 //app.UseAuthorization();
 
