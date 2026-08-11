@@ -24,8 +24,6 @@ namespace CardService.Api.Controllers
         [HttpGet("{userId}/{cardNumber}/actions")]
         public async Task<IActionResult> GetAllowedActions(string userId, string cardNumber, CancellationToken cancellationToken)
         {
-            var maskedCardNumber = CardNumberMasker.Mask(cardNumber);
-
             if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(cardNumber))
             {
                 return Problem(
@@ -33,6 +31,8 @@ namespace CardService.Api.Controllers
                     title: "Invalid request",
                     detail: "userId and cardNumber are required.");
             }
+
+            var maskedCardNumber = CardNumberMasker.Mask(cardNumber);
 
             _logger.LogInformation("Resolving allowed actions for user {UserId}, card {MaskedCardNumber}, correlation-id: {CorrelactionId}", 
                 userId, 
