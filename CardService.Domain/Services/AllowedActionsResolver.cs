@@ -5,6 +5,11 @@ namespace CardService.Domain.Services
 {
     public sealed class AllowedActionsResolver : IAllowedActionsResolver
     {
+        //get all actions from enum
+        private static readonly ActionType[] AllActions = Enum.GetValues<ActionType>()
+                                   .OrderBy(action => (int)action)
+                                   .ToArray();
+
         public IReadOnlyCollection<ActionType> GetAllowedActions(CardDetails card)
         {
             if (card is null)
@@ -12,9 +17,14 @@ namespace CardService.Domain.Services
                 throw new ArgumentNullException(nameof(card));
             }
 
-            return Enum.GetValues<ActionType>()
-                .Where(action => IsAllowed(card, action))
-                .ToArray();
+            var result = new List<ActionType>();
+
+            foreach (var action in AllActions)
+            {
+                if (IsAllowed(card, action))
+                    result.Add(action);
+            }
+            return result;
         }
 
         private static bool IsAllowed(CardDetails card, ActionType action)
@@ -38,6 +48,8 @@ namespace CardService.Domain.Services
         private static bool IsAllowedForCardStatus(ActionType action, CardStatus status, bool isPinSet)
         {
             //it can be done more robust, but in case of recruitment process assingment, I simplified it
+            //for a larger/ changing rule set this could be a declarative matrix
+            //action -> allowed statuses + pin policy or rules loaded from config
             switch (action)
             {
                 case ActionType.ACTION1:
