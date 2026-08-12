@@ -97,17 +97,15 @@ curl -i http://localhost:5295/api/cards/User1/Card17/actions
 dotnet test
 ```
 
-Zakres testów resolvera obejmuje m.in.:
+Zakres testów obejmuje m.in.:
 * przykłady z treści (PREPAID/CLOSED, CREDIT/BLOCKED + PIN)
 * ACTION5 tylko dla karty CREDIT
 * ACTION1 tylko dla statusu ACTIVE
 * reguły PIN dla ACTION6 / ACTION7 (ACTIVE oraz BLOCKED)
-Zakres testów dla api objemuje m.in.:
 * 200 + oczekiwane akcje dla User1 / Card17 (PREPAID + CLOSED)
 * 404 dla nieistniejącej karty
 * GET /health → 200
 * propagację nagłówka X-Correlation-ID
-Zakres testów dla OperationCanceledExceptionHandler:
 * przy OperationCanceledException (bez anulowania przez klienta) zwracany jest 408 z ProblemDetails
 
 ## Architektura
