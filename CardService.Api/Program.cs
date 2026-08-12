@@ -1,3 +1,4 @@
+using CardService.Api.Exceptions;
 using CardService.Api.Models;
 using CardService.Api.Services;
 using CardService.Domain.Services;
@@ -16,6 +17,7 @@ builder.Services.Configure<CardServiceOptions>(
 
 builder.Services.AddHealthChecks();
 
+builder.Services.AddExceptionHandler<OperationCanceledExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers()

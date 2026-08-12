@@ -1,31 +1,51 @@
-﻿using CardService.Api.Controllers;
-using CardService.Api.Services;
-using CardService.Domain.Services;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
-namespace CardService.Api.Exceptions
+namespace CardService.Api.Exceptions;
+
+public sealed class OperationCanceledExceptionHandler : IExceptionHandler
 {
-    public sealed class OperationCanceledExceptionHandler : IExceptionHandler
+    private readonly ILogger<OperationCanceledExceptionHandler> _logger;
+
+    public OperationCanceledExceptionHandler(ILogger<OperationCanceledExceptionHandler> logger)
     {
-        private readonly ILogger<OperationCanceledExceptionHandler> _logger;
+        _logger = logger;
+    }
 
-        public OperationCanceledExceptionHandler( ILogger<OperationCanceledExceptionHandler> logger)
+    public async ValueTask<bool> TryHandleAsync(
+        HttpContext context,
+        Exception exception,
+        CancellationToken cancellationToken)
+    {
+        if (exception is not OperationCanceledException)
         {
-            _logger = logger;
+            return false;
         }
 
-        public ValueTask<bool> TryHandleAsync(HttpContext context, Exception ex, CancellationToken ct)
+        if (context.RequestAborted.IsCancellationRequested)
         {
-            if (ex is not OperationCanceledException) return ValueTask.FromResult(false);
-
-            if (context.RequestAborted.IsCancellationRequested)
-            {
-                return ValueTask.FromResult(true);
-            }
-
-            _logger.LogWarning(ex, "Request was cancelled.");
-            context.Response.StatusCode = StatusCodes.Status408RequestTimeout;
-            return ValueTask.FromResult(true);
+            return true;
         }
+
+        _logger.LogWarning(
+            exception,
+            "Request cancelled. CorrelationId={CorrelationId}",
+            context.TraceIdentifier);
+
+        context.Response.StatusCode = StatusCodes.Status408RequestTimeout;
+
+        var problem = new ProblemDetails
+        {
+            Status = StatusCodes.Status408RequestTimeout,
+            Title = "Request timeout",
+            Detail = "The request was cancelled before it completed",
+            Instance = context.Request.Path
+        };
+
+        problem.Extensions["correlationId"] = context.TraceIdentifier;
+
+        await context.Response.WriteAsJsonAsync(problem, cancellationToken);
+
+        return true;
     }
 }

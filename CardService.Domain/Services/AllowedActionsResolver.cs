@@ -22,7 +22,9 @@ namespace CardService.Domain.Services
             foreach (var action in AllActions)
             {
                 if (IsAllowed(card, action))
+                {
                     result.Add(action);
+                }
             }
             return result;
         }
@@ -40,7 +42,9 @@ namespace CardService.Domain.Services
         private static bool IsAllowedForType(CardType cardType, ActionType action)
         {
             if (action == ActionType.ACTION5)
+            {
                 return cardType == CardType.Credit;
+            }
 
             return true;
         }

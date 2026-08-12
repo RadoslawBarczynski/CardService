@@ -12,7 +12,7 @@
 
 - `CardService.Api` — warstwa HTTP (kontrolery, DI, logowanie, health, correlation id)
 - `CardService.Domain` — modele domenowe oraz reguły dozwolonych akcji (`AllowedActionsResolver`)
-- `CardService.Tests` — testy jednostkowe resolvera (przykłady z zadania + przypadki brzegowe)
+- `CardService.Tests` — testy jednostkowe resolvera (przykłady z zadania + przypadki brzegowe), api oraz OperationCanceledExceptionHandler
 
 ---
 
@@ -86,6 +86,8 @@ curl -i http://localhost:5295/api/cards/User1/Card17/actions
 * logowanie ze zmaskowanym numerem karty (bez logowania pełnego identyfikatora)
 * nagłowek `X-Correlation-ID` — przyjmowany z requestu lub generowany automatycznie i zwracany w odpowiedzi
 * `CancellationToken` przekazywany do `GetCardDetails`
+* kolejność `actions` w JSON jest deterministyczna: rosnąco po numerze akcji (ACTION1…ACTION13)
+* globalna obsługa wyjątków (`UseExceptionHandler`); anulowanie requestu obsługiwane przez `OperationCanceledExceptionHandler` (m.in. `408`)
 
 ---
 
@@ -95,11 +97,18 @@ curl -i http://localhost:5295/api/cards/User1/Card17/actions
 dotnet test
 ```
 
-Zakres testów obejmuje m.in.:
+Zakres testów resolvera obejmuje m.in.:
 * przykłady z treści (PREPAID/CLOSED, CREDIT/BLOCKED + PIN)
 * ACTION5 tylko dla karty CREDIT
 * ACTION1 tylko dla statusu ACTIVE
 * reguły PIN dla ACTION6 / ACTION7 (ACTIVE oraz BLOCKED)
+Zakres testów dla api objemuje m.in.:
+* 200 + oczekiwane akcje dla User1 / Card17 (PREPAID + CLOSED)
+* 404 dla nieistniejącej karty
+* GET /health → 200
+* propagację nagłówka X-Correlation-ID
+Zakres testów dla OperationCanceledExceptionHandler:
+* przy OperationCanceledException (bez anulowania przez klienta) zwracany jest 408 z ProblemDetails
 
 ## Architektura
 
@@ -119,7 +128,7 @@ Dzięki podziałowi Api / Domain oraz interfejsom reguły biznesowe i źródło 
 W środowisku produkcyjnym naturalnym rozwinięciem byłoby:
 
 * integracja z prawdziwym serwisem kart (`IHttpClientFactory`, retry/timeout/circuit breaker)
-* uwierzytelnianie i autoryzacja (JWT / OIDC)
+* uwierzytelnianie i autoryzacja (JWT / OIDC / IdP)
 * rate limiting na publicznym API
 * centralna obserwowalność (OpenTelemetry)
 * Konteneryzacja (Docker) pod wdrożenie w środowisku docelowym
