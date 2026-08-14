@@ -56,6 +56,16 @@ GET /api/cards/{userId}/{cardNumber}/actions
 }
 ```
 
+## Reguły dozwolonych akcji
+
+Aktualna implementacja (`AllowedActionsResolver`) używa jawnego `switch` po typie/statusie/PIN.
+Dla stałej tabeli z zadania jest to czytelne, łatwe do weryfikacji testami i wystarczająco wydajne.
+
+Przy większej liczbie akcji, częstych zmianach reguł albo regułach pochodzących z konfiguracji / bazy danych
+bardziej utrzymywalnym (robust) podejściem byłaby deklaratywna macierz reguł
+(np. lista `ActionRule`: dozwolone typy kart, statusy, polityka PIN) albo reguły ładowane z configu -
+bez rozbudowywania kolejnych `case` w kodzie
+
 ### Kody odpowiedzi
 
 | Kod | Znaczenie |
