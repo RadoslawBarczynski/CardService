@@ -16,6 +16,7 @@ namespace CardService.Tests
         [Fact]
         public async Task TryHandleAsync_OperationCanceled_WithoutClientAbort_Writes408()
         {
+            //Arrange
             var logger = LoggerFactory.Create(b => b.AddDebug())
                 .CreateLogger<OperationCanceledExceptionHandler>();
             var handler = new OperationCanceledExceptionHandler(logger);
@@ -23,11 +24,13 @@ namespace CardService.Tests
             var context = new DefaultHttpContext();
             context.Response.Body = new MemoryStream();
 
+            //Act
             var handled = await handler.TryHandleAsync(
                 context,
                 new OperationCanceledException(),
                 CancellationToken.None);
 
+            //Assert
             Assert.True(handled);
             Assert.Equal(StatusCodes.Status408RequestTimeout, context.Response.StatusCode);
 

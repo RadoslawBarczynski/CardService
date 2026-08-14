@@ -38,8 +38,10 @@ namespace CardService.Tests
         [Fact]
         public async Task GetAllowedActions_PrepaidClosed_Returns200_AndExpectedActions()
         {
+            //Act
             var response = await _client.GetAsync("/api/cards/User1/Card17/actions");
 
+            //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var body = await response.Content.ReadFromJsonAsync<AllowedActionsResponse>(JsonOptions);
@@ -53,27 +55,34 @@ namespace CardService.Tests
         [Fact]
         public async Task GetAllowedActions_UnknownCard_Returns404()
         {
+            //Act
             var response = await _client.GetAsync("/api/cards/User1/Card999/actions");
 
+            //Assert
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
 
         [Fact]
         public async Task Health_Returns200()
         {
+            //Act
             var response = await _client.GetAsync("/health");
 
+            //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
 
         [Fact]
         public async Task GetAllowedActions_Sets_CorrelationId_Header()
         {
+            //Arrange
             var request = new HttpRequestMessage(HttpMethod.Get, "/api/cards/User1/Card17/actions");
             request.Headers.Add("X-Correlation-ID", "test-correlation-123");
 
+            //Act
             var response = await _client.SendAsync(request);
 
+            //Assert
             Assert.True(response.Headers.TryGetValues("X-Correlation-ID", out var values));
             Assert.Equal("test-correlation-123", values.Single());
         }
